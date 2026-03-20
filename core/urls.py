@@ -4,6 +4,10 @@ from . import views
 app_name = "core"
 
 urlpatterns = [
-    path("", views.home, name="home"),
-    path("employee/<int:pk>/", views.employee_detail, name="employee_detail"),
+    path("", views.dashboard, name="dashboard"),
+    path("funcionarios/", views.funcionario_list, name="funcionario_list"),
+    path("funcionarios/novo/", views.funcionario_create, name="funcionario_create"),
+    path("funcionarios/<int:pk>/", views.funcionario_detail, name="funcionario_detail"),
+    path("funcionarios/<int:pk>/editar/", views.funcionario_update, name="funcionario_update"),
+    path("funcionarios/<int:pk>/excluir/", views.funcionario_delete, name="funcionario_delete"),
 ]
