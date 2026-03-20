@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RH - Funcionários</title>
+    <style>body{font-family:Arial,sans-serif; margin:24px;} table{border-collapse:collapse; width:100%;} th,td{border:1px solid #ddd; padding:8px;} th{background:#f0f0f0;} a{color:#1a73e8; text-decoration:none;}</style>
+</head>
+<body>
+    <h1>RH - Funcionários</h1>
+    <p>Lista de funcionários ativos e suas posições.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Posição</th>
+                <th>Departamento</th>
+                <th>Contratado em</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td><a href="{% url 'core:employee_detail' employee.pk %}">{{ employee.first_name }} {{ employee.last_name }}</a></td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.position.title }}</td>
+                <td>{{ employee.position.department.name }}</td>
+                <td>{{ employee.hired_date }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">Nenhum funcionário encontrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
