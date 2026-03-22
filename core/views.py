@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Sum
 from .models import Funcionario, Departamento
-from .forms import FuncionarioForm
+from .forms import FuncionarioForm, DepartamentoForm
 
 
 def dashboard(request):
@@ -67,3 +67,14 @@ def funcionario_delete(request, pk):
         funcionario.delete()
         return redirect("core:funcionario_list")
     return render(request, "core/funcionario_confirm_delete.html", {"funcionario": funcionario})
+
+
+def departamento_create(request):
+    if request.method == "POST":
+        form = DepartamentoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("core:dashboard")  # ou para uma lista de departamentos
+    else:
+        form = DepartamentoForm()
+    return render(request, "core/departamento_form.html", {"form": form, "titulo": "Novo Departamento"})

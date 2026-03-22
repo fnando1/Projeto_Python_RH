@@ -10,4 +10,5 @@ urlpatterns = [
     path("funcionarios/<int:pk>/", views.funcionario_detail, name="funcionario_detail"),
     path("funcionarios/<int:pk>/editar/", views.funcionario_update, name="funcionario_update"),
     path("funcionarios/<int:pk>/excluir/", views.funcionario_delete, name="funcionario_delete"),
+    path("departamentos/novo/", views.departamento_create, name="departamento_create"),
 ]
