@@ -25,7 +25,9 @@ SECRET_KEY = "django-insecure-%iy+%o*ugk*_#ny7rjtmn_9ak*jkhz#=8$nnfdv&bu_-7)natp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['fuzzy-chainsaw-4j7p66466px6c5gxp-8001.app.github.dev', 'localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = ['https://fuzzy-chainsaw-4j7p66466px6c5gxp-8001.app.github.dev', 'https://localhost:8001']
 
 
 # Application definition
@@ -49,21 +51,37 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB", "rh_system"),
-        "USER": os.environ.get("POSTGRES_USER", "postgres"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
-        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
-# Fallback para desenvolvimento local sem Postgres, se variável DJANGO_USE_SQLITE=1.
-if os.environ.get("DJANGO_USE_SQLITE", "0") == "1":
+# Para usar PostgreSQL, defina a variável de ambiente DJANGO_USE_POSTGRES=1.
+if os.environ.get("DJANGO_USE_POSTGRES", "0") == "1":
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("POSTGRES_DB", "rh_system"),
+            "USER": os.environ.get("POSTGRES_USER", "postgres"),
+            "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
+            "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+            "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        }
+    }
+
+# Para usar MySQL, defina a variável de ambiente DJANGO_USE_MYSQL=1.
+if os.environ.get("DJANGO_USE_MYSQL", "0") == "1":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.environ.get("MYSQL_DB", "rh_system"),
+            "USER": os.environ.get("MYSQL_USER", "root"),
+            "PASSWORD": os.environ.get("MYSQL_PASSWORD", "password"),
+            "HOST": os.environ.get("MYSQL_HOST", "127.0.0.1"),
+            "PORT": os.environ.get("MYSQL_PORT", "3306"),
+            "OPTIONS": {
+                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
         }
     }
 

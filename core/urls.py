@@ -11,4 +11,5 @@ urlpatterns = [
     path("funcionarios/<int:pk>/editar/", views.funcionario_update, name="funcionario_update"),
     path("funcionarios/<int:pk>/excluir/", views.funcionario_delete, name="funcionario_delete"),
     path("departamentos/novo/", views.departamento_create, name="departamento_create"),
+    path("er-diagram/", views.er_diagram, name="er_diagram"),
 ]
