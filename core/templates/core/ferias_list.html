@@ -1,0 +1,53 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <h2>Gestão de Férias</h2>
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <form method="get" class="row g-2">
+                <div class="col-md-8"><input type="text" name="search" value="{{ search }}" class="form-control" placeholder="Buscar por nome do funcionário"></div>
+                <div class="col-md-4"><button class="btn btn-primary" type="submit">Buscar</button></div>
+            </form>
+        </div>
+        <div class="col-md-4 text-end"><a class="btn btn-success" href="{% url 'core:ferias_create' %}">+ Registrar Férias</a></div>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Funcionário</th><th>Data Início</th><th>Data Fim</th><th>Dias</th><th>Ações</th></tr>
+        </thead>
+        <tbody>
+            {% for f in ferias %}
+            <tr>
+                <td><a href="{% url 'core:ferias_detail' f.pk %}">{{ f.funcionario.nome }}</a></td>
+                <td>{{ f.data_inicio|date:"d/m/Y" }}</td>
+                <td>{{ f.data_fim|date:"d/m/Y" }}</td>
+                <td>{{ f.data_fim|add:f.data_inicio|stringformat:"s" }}
+                    {% with dias=f.data_fim|add:f.data_inicio %}
+                        {% comment %}Calcula dias{% endcomment %}
+                    {% endwith %}
+                    <span class="badge bg-info">{{ f.ferias_duration }}</span>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'core:ferias_update' f.pk %}">Editar</a>
+                    <a class="btn btn-sm btn-outline-danger" href="{% url 'core:ferias_delete' f.pk %}">Excluir</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center">Nenhum período de férias registrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+{% endblock %}

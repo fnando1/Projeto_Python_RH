@@ -1,0 +1,115 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <div class="row mb-3">
+        <div class="col"><h2>Dashboard RH</h2></div>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-3"><div class="card border-primary"><div class="card-body"><h5 class="card-title">Total de Funcionários</h5><p class="card-text display-6">{{ total_funcionarios }}</p></div></div></div>
+        <div class="col-md-3"><div class="card border-success"><div class="card-body"><h5 class="card-title">Gasto com Folha</h5><p class="card-text display-6">R$ {{ total_folha }}</p></div></div></div>
+        <div class="col-md-3"><div class="card border-info"><div class="card-body"><h5 class="card-title">Departamentos</h5><p class="card-text display-6">{{ departamentos.count }}</p></div></div></div>
+        <div class="col-md-3"><div class="card border-warning"><div class="card-body"><h5 class="card-title">Em Férias Hoje</h5><p class="card-text display-6">{{ total_ferias_hoje }}</p></div></div></div>
+    </div>
+
+    <!-- Funcionários em Férias -->
+    <div class="row mt-4">
+        <div class="col">
+            <h3>👋 Funcionários em Férias</h3>
+            {% if ferias_em_andamento %}
+                <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-warning">
+                        <tr>
+                            <th>Funcionário</th>
+                            <th>Departamento</th>
+                            <th>Data Início</th>
+                            <th>Data Término</th>
+                            <th>Status</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ferias in ferias_em_andamento %}
+                        <tr class="table-warning">
+                            <td><strong>{{ ferias.funcionario.nome }}</strong></td>
+                            <td><span class="badge bg-secondary">{{ ferias.funcionario.departamento.sigla }}</span></td>
+                            <td>{{ ferias.data_inicio|date:"d/m/Y" }}</td>
+                            <td>{{ ferias.data_fim|date:"d/m/Y" }}</td>
+                            <td><span class="badge bg-danger">🏖️ Em Férias</span></td>
+                            <td><a href="{% url 'core:ferias_detail' ferias.pk %}" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            {% else %}
+                <div class="alert alert-success" role="alert">
+                    ✅ Nenhum funcionário em férias no momento.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Férias Próximas -->
+    {% if ferias_proximas %}
+    <div class="row mt-4">
+        <div class="col">
+            <h3>📅 Férias Próximas (próximos 30 dias)</h3>
+            <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-info">
+                    <tr>
+                        <th>Funcionário</th>
+                        <th>Departamento</th>
+                        <th>Data Início</th>
+                        <th>Dias até Férias</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ferias in ferias_proximas %}
+                    <tr>
+                        <td>{{ ferias.funcionario.nome }}</td>
+                        <td><span class="badge bg-secondary">{{ ferias.funcionario.departamento.sigla }}</span></td>
+                        <td>{{ ferias.data_inicio|date:"d/m/Y" }}</td>
+                        <td><span class="badge bg-info">Em breve</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row mt-4">
+        <div class="col">
+            <h3>Funcionários</h3>
+            {% if funcionarios %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Cargo</th>
+                            <th>Departamento</th>
+                            <th>Salário</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for funcionario in funcionarios %}
+                            <tr>
+                                <td><a href="{% url 'core:funcionario_detail' funcionario.pk %}">{{ funcionario.nome }}</a></td>
+                                <td>{{ funcionario.cargo }}</td>
+                                <td>{{ funcionario.departamento }}</td>
+                                <td>R$ {{ funcionario.salario }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Nenhum funcionário cadastrado.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row mt-4"><div class="col"><a class="btn btn-primary" href="{% url 'core:funcionario_list' %}">Ver Funcionários</a> <a class="btn btn-warning" href="{% url 'core:ferias_list' %}">Gerenciar Férias</a></div></div>
+</div>
+{% endblock %}
