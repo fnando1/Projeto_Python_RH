@@ -1,6 +1,6 @@
 # Projeto Python RH
 
-Criação de sistema RH completo Django + PostgreSQL ou SQLite.
+Criação de sistema RH com Django + PostgreSQL ou SQLite.
 
 ## Requisitos
 - Modelos:
